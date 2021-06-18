@@ -1,0 +1,15 @@
+* {
+  margin: 0;
+
+}
+
+.body {
+  line-height: 24px;
+  font-size: 14px;
+  font-family: 'Benne', serif;
+  font-weight: normal;
+  color: #777777;
+  padding: 0;
+  margin: 0;
+}
+
