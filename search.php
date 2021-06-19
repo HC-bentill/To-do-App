@@ -3,16 +3,16 @@
 <?php
 include('db.php');
 
-$page = (isset($_GET['page']) ? (int)$_GET['page'] : 1);
-$perPage = (isset($_GET['per-page']) && (int)($_GET['per-page']) <= 50 ? (int)$_GET['per-page'] : 5 );
-$start = ($page > 1) ? ($page * $perPage) - $perPage : 0;
-//read data in the db
-$sql = "SELECT * FROM tasks limit ".$start." ,  ".$perPage." ";
-$total = $con->query("select * from tasks")->num_rows;
-$pages = ceil ($total / $perPage);
-//query db
-//loop through the variable $row
+if (isset($_POST['search'])){
+    //get text from form field
+$name = $_POST['search']; 
+//statement to search for similar item in the db
+$sql = "select * from tasks where name like '%$name%'";
+
 $rows = $con->query($sql) or die($con->error);
+
+}
+
 
 ?>
 
@@ -61,9 +61,14 @@ $rows = $con->query($sql) or die($con->error);
                </form>
          
        </div>
-       
-       <table class="table table-dark table-hover">
 
+       <?php if(mysqli_num_rows($rows) < 1 ):?>
+       <h3 class="text-danger text-center">Nothing Found</h3>
+       <a href="index.php" class="btn btn-success">Return</a>
+
+       <?php else: ?>
+       <!-- table begins here -->
+       <table class="table table-hover">
         <br> <br>
   <thead>
     <tr>
@@ -84,36 +89,13 @@ $rows = $con->query($sql) or die($con->error);
  <?php endwhile; ?>
 
   </tbody>
-</table>
+  </table>
+<?php endif;?>
        </div>
      </div>
    </div>
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-5 offset-md-1">
-<!-- pagination -->
-<nav aria-label="...">
-  <ul class="pagination">
-    <!-- <li class="page-item disabled">
-      <a class="page-link" href="#" tabindex="-1">Previous</a>
-    </li> -->
-    <?php for($i = 1 ; $i <= $pages; $i++): ?>
-    <li class="page-item">
-       <a class="page-link" href="?page=<?php echo $i;?>&per-page=<?php echo $perPage;?>">
-       <?php echo $i;?>
-        </a>
-      </li>
-      <?php endfor; ?>
-      
-    <!-- <li class="page-item">
-      <a class="page-link" href="#">Next</a>
-    </li> -->
-  </ul>
-</nav>
-    </div>
-  </div>
-</div>
+ 
 
 
     

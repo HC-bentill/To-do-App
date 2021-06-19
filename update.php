@@ -2,7 +2,7 @@
 
 <?php
 include('db.php');
-$id = $_GET['id'];
+$id = (int)$_GET['id'];
 //select data with its id in the db
 $sql = "select * from tasks where id='$id'";
 //query the db
@@ -12,7 +12,7 @@ $row = $rows->fetch_assoc();
 
 if(isset($_POST['send'])){
     //data from the form
-  $taskdata = $_POST['task'];
+  $taskdata = htmlspecialchars($_POST['task']);
   $Ssql = "update tasks set name='$taskdata' where id = '$id'";
   $con->query($Ssql);
 header('location: index.php');
@@ -65,6 +65,7 @@ header('location: index.php');
     <input type="text" value="<?php echo $row['name'] ;?>" name="task" class="form-control" required>
   </div>
   <input name="send" value="Update Task" type="submit" class="btn btn-success" />
+  <a href="index.php" class="btn btn-danger ml-2"><i class="fa fa-arrow-left"></i> &nbsp Back</a>
      </form>
        
        </div>
